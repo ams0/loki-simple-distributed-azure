@@ -1,0 +1,29 @@
+config:
+  lokiAddress: http://loki-loki-simple-scalable-gateway/loki/api/v1/push
+  snippets:
+    pipelineStages:
+      - cri: {}
+      - match:
+          selector: '{app="ingress-nginx"}'
+          stages:
+          - regex:
+              expression: '^(?P<remote_addr>[\w\.]+) - (?P<remote_user>[^ ]*) \[(?P<time_local>.*)\] "(?P<method>[^ ]*) (?P<request>[^ ]*) (?P<protocol>[^ ]*)" (?P<status>[\d]+) (?P<body_bytes_sent>[\d]+) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)"?'
+          - labels:
+              remote_addr:
+              remote_user:
+              time_local:
+              method:
+              request:
+              protocol:
+              status:
+              body_bytes_sent:
+              http_referer:
+              http_user_agent:
+    extraRelabelConfigs: 
+      # - source_labels: [__meta_kubernetes_pod_label_spark_role]
+      #   target_label: spark_role
+      # - source_labels: [__meta_kubernetes_pod_label_sparkoperator_k8s_io_app_name]
+      #   target_label: spark_app
+      - source_labels: [__meta_kubernetes_pod_label_promtail]
+        regex: true.*
+        action: keep  

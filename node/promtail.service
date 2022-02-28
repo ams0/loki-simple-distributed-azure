@@ -1,0 +1,12 @@
+#/etc/systemd/system/promtail.service
+[Unit]
+Description=Promtail service
+After=network.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/local/bin/promtail -config.file /usr/local/bin/config-promtail.yml
+
+[Install]
+WantedBy=multi-user.target

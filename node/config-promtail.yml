@@ -1,0 +1,25 @@
+#/usr/local/bin/config-promtail.yml
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: https://loki.aks.cookingwithazure.com/loki/api/v1/push
+    basic_auth:
+      username: promtail
+      password: xxxxx
+    tls_config:
+      insecure_skip_verify: true
+
+scrape_configs:
+- job_name: system
+  static_configs:
+  - targets:
+      - localhost
+    labels:
+      source: vm
+      job: varlogs
+      __path__: /var/log/**/*.log

@@ -48,6 +48,8 @@ kubectl create secret generic -n monitoring loki-secrets --from-literal=AZURE_AC
 ```
 
 Finally deploy Loki and promtail, using the provided `values.yaml` file (replace the azure storage account name)
+
+```
 helm upgrade loki --install -f values-ss.yaml -n monitoring --create-namespace \
   --set loki.config.common.storage.azure.account_name=storeme \
   --set loki.config.common.storage.azure.container_name=loki \
@@ -108,9 +110,9 @@ curl --user promtail:xxx http://loki-loki-simple-scalable-write:3100/ready
 
 ## Monitor VMs
 
+It's simple as running promtail and pointing it to the ingress of our Loki deployment. We use a `systemd` unit file to make sure promtail is always running.
 
 ```
-
 wget https://github.com/grafana/loki/releases/download/v2.4.2/promtail-linux-amd64.zip
 unzip promtail-linux-amd64.zip
 mv promtail-linux-amd64 /usr/local/bin/promtail
@@ -158,6 +160,9 @@ scrape_configs:
       job: varlogs
       __path__: /var/log/**/*.log
 EOF
+```
+
+This will enable and start the promtail service. `journalctl` is the `systemd`-native way to check service logs.
 
 ```
 systemctl daemon-reload
@@ -167,4 +172,6 @@ journalctl -x -u promtail
 ```
 
 
-# data persist cluster destroy
+## Notes
+
+Data persist cluster destroy! 

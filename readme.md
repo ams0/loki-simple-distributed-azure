@@ -1,4 +1,4 @@
-# Loki simple, distrivytedwith Azure storage
+# Loki simple, distributed with Azure storage
 
 This deploys the [loki-simple-scalable](https://github.com/grafana/helm-charts/tree/main/charts/loki-simple-scalable) helm chart with configurable number of readers and writers and a `gateway` component (essentially, an nginx pod and the associated ingress):
 
